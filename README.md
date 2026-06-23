@@ -2,6 +2,10 @@
 
 **Track**: Agents for Good
 
+<p align="center">
+  <img src="docs/screenshots/home_dashboard.png" width="100%" alt="EcoGuardian AI Dashboard" />
+</p>
+
 EcoGuardian AI is a GPS-powered autonomous AI environmental assistant that continuously analyzes the user's surroundings and provides personalized environmental guidance. Rather than just displaying basic weather, it understands what the environment means for the user, providing proactive warnings, health precautions, plant selection advice, carbon footprint coaching, and 3R coordination.
 
 ---
@@ -68,6 +72,33 @@ graph TD
 
 ---
 
+## 📸 Application Screenshots
+
+<table align="center">
+  <tr>
+    <td width="50%" align="center">
+      <b>💬 AI Chat Assistant</b><br/>
+      <img src="docs/screenshots/ai_chat.png" alt="AI Chat Assistant" />
+    </td>
+    <td width="50%" align="center">
+      <b>🌿 Plant Recommendations</b><br/>
+      <img src="docs/screenshots/plant_recommendations.png" alt="Plant Recommendations" />
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <b>🚗 Carbon Coach</b><br/>
+      <img src="docs/screenshots/carbon_coach.png" alt="Carbon Coach" />
+    </td>
+    <td width="50%" align="center">
+      <b>🌳 Tree Plantation Game</b><br/>
+      <img src="docs/screenshots/tree_plantation.png" alt="Tree Plantation Game" />
+    </td>
+  </tr>
+</table>
+
+---
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -94,3 +125,10 @@ graph TD
    ```bash
    npm run build
    ```
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
