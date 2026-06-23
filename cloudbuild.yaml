@@ -1,0 +1,34 @@
+steps:
+  # Step 1: Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/third-index-500306-k5/ecoguardian-repo/ecoguardian-ai:latest'
+      - '.'
+
+  # Step 2: Push to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'us-central1-docker.pkg.dev/third-index-500306-k5/ecoguardian-repo/ecoguardian-ai:latest'
+
+  # Step 3: Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'ecoguardian-ai'
+      - '--image=us-central1-docker.pkg.dev/third-index-500306-k5/ecoguardian-repo/ecoguardian-ai:latest'
+      - '--region=us-central1'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--port=8080'
+      - '--project=third-index-500306-k5'
+
+images:
+  - 'us-central1-docker.pkg.dev/third-index-500306-k5/ecoguardian-repo/ecoguardian-ai:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY

@@ -106,7 +106,9 @@ function PlantEngine({ currentLocation }) {
   const [careFilter, setCareFilter] = useState('all'); // all, low, moderate
 
   const filteredPlants = plantsData.filter(plant => {
-    const matchesPlacement = placementFilter === 'all' || plant.placement === placementFilter || plant.placement === 'both';
+    const matchesPlacement = placementFilter === 'all' 
+      || plant.placement === placementFilter 
+      || plant.placement === 'both';
     const matchesBenefit = benefitFilter === 'all' || plant.benefit === benefitFilter;
     const matchesCare = careFilter === 'all' || plant.care === careFilter;
     return matchesPlacement && matchesBenefit && matchesCare;

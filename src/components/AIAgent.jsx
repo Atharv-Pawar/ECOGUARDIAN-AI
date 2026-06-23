@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Send, Bot, User, Bell, Info, ShieldAlert, Zap } from 'lucide-react';
 
 function AIAgent({ currentLocation, notifications, ecoPoints, setEcoPoints }) {
@@ -15,28 +15,36 @@ function AIAgent({ currentLocation, notifications, ecoPoints, setEcoPoints }) {
   const [hasAskedQuestion, setHasAskedQuestion] = useState(false);
 
   const chatEndRef = useRef(null);
+  const isFirstRender = useRef(true);
+  const msgIdCounter = useRef(100);
 
   // Auto-scroll chat
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
 
-  // Handle location update greeting
+  // Handle location update greeting — skip on initial mount
   useEffect(() => {
-    // Add a system update in chat when location changes
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const id1 = ++msgIdCounter.current;
+    const id2 = ++msgIdCounter.current;
     setMessages(prev => [
       ...prev,
       {
-        id: Date.now(),
+        id: id1,
         sender: 'system',
         text: `GPS Location updated to: ${currentLocation.name}`,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        time: now
       },
       {
-        id: Date.now() + 1,
+        id: id2,
         sender: 'bot',
         text: `I've analyzed the environment at ${currentLocation.name}. Today's AQI is ${currentLocation.aqi} (${currentLocation.aqiLabel}) and the weather is ${currentLocation.weather.status} (${currentLocation.weather.temp}°C). ${currentLocation.alerts.length > 0 ? "I've detected some environmental alerts. Ask me for details!" : "Conditions look stable here."}`,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        time: now
       }
     ]);
   }, [currentLocation.id]);
@@ -65,7 +73,7 @@ function AIAgent({ currentLocation, notifications, ecoPoints, setEcoPoints }) {
       Recommended preparation: Carry electrolytes, stay hydrated, and wear UV protection if the index is high!`;
     }
 
-    if (q.includes('water') || q.includes('drink') || q.includes('tds') || q.includes('pH')) {
+    if (q.includes('water') || q.includes('drink') || q.includes('tds') || q.includes('ph')) {
       return `Water quality assessment at ${currentLocation.name}:
       - Status: ${currentLocation.water.status}
       - TDS: ${currentLocation.water.tds} ppm
@@ -133,8 +141,9 @@ function AIAgent({ currentLocation, notifications, ecoPoints, setEcoPoints }) {
   const handleSendMessage = (text) => {
     if (!text.trim()) return;
 
+    const userMsgId = ++msgIdCounter.current;
     const newMsg = {
-      id: Date.now(),
+      id: userMsgId,
       sender: 'user',
       text,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -148,14 +157,16 @@ function AIAgent({ currentLocation, notifications, ecoPoints, setEcoPoints }) {
     setTimeout(() => {
       setIsTyping(false);
       const botText = generateResponse(text);
-      
+      const botMsgId = ++msgIdCounter.current;
+      const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
       setMessages(prev => [
         ...prev,
         {
-          id: Date.now() + 1,
+          id: botMsgId,
           sender: 'bot',
           text: botText,
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          time: now
         }
       ]);
 
@@ -163,13 +174,14 @@ function AIAgent({ currentLocation, notifications, ecoPoints, setEcoPoints }) {
       if (!hasAskedQuestion) {
         setHasAskedQuestion(true);
         setEcoPoints(prev => prev + 15);
+        const achievementId = ++msgIdCounter.current;
         setMessages(prev => [
           ...prev,
           {
-            id: Date.now() + 2,
+            id: achievementId,
             sender: 'system',
             text: "🎉 Achievement Unlocked: Environmental Scholar! (+15 Eco Points added)",
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            time: now
           }
         ]);
       }

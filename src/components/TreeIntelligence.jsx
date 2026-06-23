@@ -47,10 +47,11 @@ function TreeIntelligence({ currentLocation, ecoPoints, setEcoPoints }) {
     const nextPoints = growthPoints + increment;
     if (nextPoints >= 100) {
       if (treeStage < 2) {
+        // Advance to next stage, carry over remaining points
         setTreeStage(prev => prev + 1);
-        setGrowthPoints(nextPoints - 100);
+        setGrowthPoints(Math.min(nextPoints - 100, 99));
       } else {
-        // Complete mature tree
+        // treeStage === 2 → complete mature tree
         setTreeStage(3);
         setGrowthPoints(100);
         setPlantedCount(prev => prev + 1);

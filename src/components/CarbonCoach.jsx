@@ -50,11 +50,13 @@ function CarbonCoach({ carbonLogs, setCarbonLogs, ecoPoints, setEcoPoints }) {
   const handleSaveLog = () => {
     if (loggedToday) return;
 
-    // Update carbonLogs for Sunday or append/update today's date
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const todayName = days[new Date().getDay()] + ' (Today)';
+
+    // Update carbonLogs: replace last entry with today's real data
     const updatedLogs = [...carbonLogs];
-    // We can replace the last element (Sun) or simulate replacing today
     updatedLogs[updatedLogs.length - 1] = {
-      date: 'Sun (Today)',
+      date: todayName,
       score: todayStats.score,
       savings: todayStats.savings
     };
